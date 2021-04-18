@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meng.dao.ClazzDao">
+
+    <select id="getAllList" parameterType="com.meng.model.Clazz" resultType="com.meng.model.Clazz">
+        select * from tb_clazz
+        <where>
+            <if test="gradeName != null and gradeName != '' ">
+                    and gradeName = #{gradeName}
+            </if>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+        </where>
+    </select>
+    <select id="getAll" resultType="com.meng.model.Clazz">
+        select * from tb_clazz
+    </select>
+
+    <delete id="delete">
+        delete from
+        tb_clazz
+        where id = #{id}
+    </delete>
+    <delete id="deletebatch" parameterType="java.lang.String">
+        delete from tb_clazz where id in
+        <foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+            #{ids,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    <insert id="add" parameterType="com.meng.model.Clazz">
+        insert into ssm_student.tb_clazz(name, number, introduction, teacherName, email, telephone, gradeName)
+        values (#{name}, #{number}, #{introduction}, #{teacherName}, #{email}, #{telephone}, #{gradeName})
+    </insert>
+
+
+    <update id="update" parameterType="com.meng.model.Clazz">
+        UPDATE ssm_student.tb_clazz
+        SET name=#{name},
+            number=#{number},
+            introduction=#{introduction},
+            teacherName=#{teacherName},
+            email=#{email},
+            telephone=#{telephone},
+            gradeName=#{gradeName}
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>

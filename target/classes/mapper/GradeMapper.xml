@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meng.dao.GradeDao">
+    <select id="findAllGrade" resultType="com.meng.model.Grade">
+        select *
+        from tb_grade
+    </select>
+
+    <select id="findGradeList" parameterType="com.meng.model.Grade" resultType="com.meng.model.Grade">
+        select * from tb_grade
+        <where>
+            <if test="name != null and name != '' ">
+                and name = #{name}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="add" parameterType="com.meng.model.Grade">
+        insert into tb_grade(name,manager,email,telephone,introduction)
+        values (#{name},#{manager},#{email},#{telephone},#{introduction})
+    </insert>
+
+    <delete id="delete">
+        delete from tb_grade
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        delete from tb_grade
+        where id in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+
+
+    <update id="update" parameterType="com.meng.model.Grade">
+        update tb_grade
+        set
+        name = #{name },
+        manager=#{manager},
+        email = #{email},
+        telephone = #{telephone},
+        introduction = #{introduction}
+        where id = #{id}
+    </update>
+
+</mapper>

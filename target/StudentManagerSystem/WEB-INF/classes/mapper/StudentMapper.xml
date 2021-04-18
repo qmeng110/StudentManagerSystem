@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meng.dao.StudentDao">
+    <select id="login" parameterType="com.meng.model.LoginForm" resultType="com.meng.model.Student">
+
+        select *
+        from ssm_student.tb_student where 1=1
+        <if test="name != null and name != '' ">
+            and name = #{name}
+        </if>
+        <if test="password != null and password != '' ">
+            and password = #{password}
+        </if>
+
+    </select>
+
+        <select id="selectStudentList" parameterType="com.meng.model.Student" resultType="com.meng.model.Student">
+            select *
+            from ssm_student.tb_student
+            <where>
+                <if test="name != null and name !='' ">
+                    and name = #{name}
+                </if>
+                <if test="clazzName != null and clazzName != '' ">
+                    and clazzName = #{clazzName}
+                </if>
+            </where>
+
+
+        </select>
+
+        <insert id="insertStudent" parameterType="com.meng.model.Student">
+         INSERT INTO tb_student(sno, name, gender, password, portraitPath, email, telephone, address, introduction,clazzName)
+        VALUES (#{sno}, #{name}, #{gender}, #{password}, #{portraitPath}, #{email}, #{telephone}, #{address},#{introduction}, #{clazzName})
+      </insert>
+
+
+    <update id="update" parameterType="com.meng.model.Student">
+        update tb_student
+
+        <set>
+            <if test="sno!=null and sno!=''">sno=#{sno},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="gender!=null and gender!=''">gender=#{gender},</if>
+            <if test="password!=null and password!=''">password=#{password},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="telephone!=null and telephone!=''">telephone=#{telephone},</if>
+            <if test="address!=null and address!=''">address=#{address},</if>
+            <if test="introduction!=null and introduction!=''">introduction=#{introduction},</if>
+            <if test="portraitPath!=null and portraitPath!=''">portraitPath=#{portraitPath},</if>
+            <if test="clazzName!=null and clazzName!=''">clazzName=#{clazzName},</if>
+        </set>
+        WHERE id = #{id}
+
+    </update>
+
+    <delete id="delete" >
+        delete from tb_student where id = #{id}
+    </delete>
+
+    <delete id="deleteList" parameterType="java.lang.String">
+        delete from tb_student where id in
+        <foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+            #{ids,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+
+
+    <delete id="deletebatch">
+        delete from tb_student where id in
+        <foreach collection="array" item="ids" index="no" open="(" separator="," close = ")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updatePassword" parameterType="com.meng.model.Student">
+        update tb_student
+        <set>
+            <if test="password!=null and password!=''">password=#{password}</if>
+        </set>
+        where  id = #{id}
+    </update>
+
+
+</mapper>

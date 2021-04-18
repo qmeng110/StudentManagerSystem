@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meng.dao.TeacherDao">
+    <select id="login" parameterType="com.meng.model.LoginForm" resultType="com.meng.model.Teacher">
+
+        select *
+        from tb_teacher where 1=1
+        <if test="name != null and name != '' ">
+            and name = #{name}
+        </if>
+        <if test="password != null and password != '' ">
+            and password = #{password}
+        </if>
+
+    </select>
+
+
+    <select id="findAllTeacher" resultType="com.meng.model.Teacher" parameterType="com.meng.model.Student">
+        select * from tb_teacher
+        <where>
+            <if test="name != null and name != '' ">
+                and name = #{name}
+            </if>
+            <if test="clazzName != null and clazzName != ''">
+                and clazzName = #{clazzName}
+            </if>
+        </where>
+    </select>
+
+   <insert id="add" parameterType="com.meng.model.Teacher">
+       insert  into tb_teacher(tno,name,gender,password,email,telephone,address,clazzName)
+       values (#{tno},#{name},#{gender},#{password},#{email},#{telephone},#{address},#{clazzName})
+   </insert>
+    
+    <update id="update" parameterType="com.meng.model.Teacher">
+        update  tb_teacher
+       <set>
+           <if test="tno != null and tno != ''">tno = #{tno},</if>
+           <if test="name != null and tno  != '' ">name = #{name},</if>
+           <if test="gender != null and tno != '' ">gender=#{gender},</if>
+           <if test="password  != null and password != '' ">password = #{password},</if>
+           <if test="email != null and email != '' ">email = #{email},</if>
+           <if test="telephone != null and telephone != '' ">telephone = #{telephone},</if>
+           <if test="address != null and address != '' ">address = #{address },</if>
+           <if test="clazzName != null and clazzName != '' ">clazzName = #{clazzName}</if>
+       </set>
+
+
+        where
+        id = #{id}
+    </update>
+    
+    <delete id="delete" >
+        delete from tb_teacher where id = #{id}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from tb_teacher where id in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+             #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updatePassword" parameterType="com.meng.model.Teacher">
+        update tb_teacher
+        <set>
+            <if test="password!=null and password!=''">password=#{password}</if>
+        </set>
+        where  id = #{id}
+    </update>
+
+</mapper>
